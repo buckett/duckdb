@@ -135,7 +135,8 @@ duckdb_string duckdb_value_string_internal(duckdb_result *result, idx_t col, idx
 	if (!CanFetchValue(result, col, row)) {
 		return FetchDefaultValue::Operation<duckdb_string>();
 	}
-	if (duckdb_column_type(result, col) != DUCKDB_TYPE_VARCHAR) {
+	duckdb_type type = duckdb_column_type(result, col);
+	if (type != DUCKDB_TYPE_VARCHAR && type != DUCKDB_TYPE_JSON) {
 		return FetchDefaultValue::Operation<duckdb_string>();
 	}
 	// FIXME: this obviously does not work when there are null bytes in the string
